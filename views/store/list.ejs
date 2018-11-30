@@ -18,9 +18,7 @@
     <tr style='text-align:left; background-color:#CCC'>
         <th>Description</th>
         <th>YTlink</th>
-        <th>SessionID</th>
         <th>Votes</th>
-        <th>AddedByUser</th>
         <th>AddedWhen</th>
         <th>Action</th>
     </tr>
@@ -31,29 +29,15 @@
             <tr>
                 <td><%= song.description %></td>
                 <td><%= song.ytlink %></td>
-                <td><%= song.sessionid %></td>
                 <td><%= song.votes %></td>
-                <td><%= song.addedbyuser %></td>
                 <td><%= song.addedwhen %></td>
                 <td>
-                    <div class="up-down" style="float:left">
-
-                        <form action="/store/delete/<%= item.id %>" method="post" style="float:right">
-                            <input name="delete" onclick="return confirm('Are you sure you ' +
-                                                                         'want to upvote?')"
-
-                                   type="submit" value='Upvote'>
-                            <input name="_method" type="hidden" value="UPVOTE">
+                    <div class="edit-delete" style="float:left">
+                        <form action="/store/delete/<%= song.description %>" method="post" style="float:right">
+                            <input name="delete" onclick="return confirm('Are you sure you want to delete?')"
+                                   type="submit" value='Delete'>
+                            <input name="_method" type="hidden" value="DELETE">
                         </form>
-
-                        <form action="/store/delete/<%= item.id %>" method="post" style="float:right">
-                            <input name="delete" onclick="return confirm('Are you sure you ' +
-                                                                         'want to downvote?')"
-
-                                   type="submit" value='Downvote'>
-                            <input name="_method" type="hidden" value="DOWNVOTE">
-                        </form>
-
                     </div>
                 </td>
             </tr>
