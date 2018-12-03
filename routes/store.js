@@ -206,6 +206,14 @@ app.get('/next-song', async function (request, response) {
     var query = 'select * from songs'
 
     let [ song ] = await db.any('SELECT * FROM songs ORDER BY votes DESC LIMIT 1');
-    await db.any('DELETE FROM songs WHERE id = ' + song.id)
+    
+    if (!song) {
+        // if we don't have a song to play, return a rickroll
+        song = { description: 'Never Gonna Give You Up', ytlink: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' }
+    } else {
+        // if we do have a song to play, remove it from the queue
+        await db.any('DELETE FROM songs WHERE id = ' + song.id)
+    }
+
     response.json(song)
 });
