@@ -4,7 +4,7 @@ class App extends Component {
     constructor(props) {
         super(props)
 
-        this.state = { title: 'foo' }
+        this.state = { title: 'Never Gonna Give You Up' }
 
         this.player = new YT.Player('player', {
             height: '390',
@@ -15,6 +15,8 @@ class App extends Component {
                 'onStateChange': evt => this.handleStateChange(evt)
             }
         })
+
+        setTimeout(() => this.playNext(), 1000);
     }
 
     handleStateChange(evt) {        
@@ -28,10 +30,10 @@ class App extends Component {
     }
 
     async playNext() {
-        await new Promise(res => setTimeout(res, 1000))
-        let { title, url } = { title: 'Never gonna hit those notes', url: 'http://www.youtube.com/v/lXMskKTw3Bc?version=3' } // await fetch('/next-song').then(r => r.json());
-        this.setState({ title });
-        this.player.loadVideoByUrl(url);
+        let { description, ytlink } = await fetch('/store/next-song').then(r => r.json())
+        let [ videoID ] = ytlink.match(/[A-Za-z0-9-_]{11}/)
+        this.player.loadVideoById(videoID)
+        this.setState({ title: description })
     }
 
     render() {

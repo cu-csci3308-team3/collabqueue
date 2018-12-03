@@ -201,3 +201,11 @@ app.delete('/delete/(:id)', function (req, res) {
                    res.redirect('/store')
         })
 });
+
+app.get('/next-song', async function (request, response) {
+    var query = 'select * from songs'
+
+    let [ song ] = await db.any('SELECT * FROM songs ORDER BY votes DESC LIMIT 1');
+    await db.any('DELETE FROM songs WHERE id = ' + song.id)
+    response.json(song)
+});
