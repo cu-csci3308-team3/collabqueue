@@ -11,4 +11,6 @@ const dbConfig = {
 
 var db = pgp(dbConfig);
 
+db.any('delete from songs;')
+
 module.exports = db;
