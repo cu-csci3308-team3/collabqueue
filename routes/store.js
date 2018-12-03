@@ -7,8 +7,7 @@ app.get('/', function (request, response) {
 
     // TODO: Initialize the query variable with a SQL query
     // that returns all the rows in the ‘store’ table
-    var query = 'select * from songs';
-
+    var query = 'select * from songs order by votes desc, addedwhen asc, description asc;';
     db.any(query)
         .then(function (rows) {
             // render views/store/list.ejs template file
@@ -130,7 +129,7 @@ app.get('/edit/(:id)', function (request, response) {
 
 // Route to update values. Notice that request method is PUT here
 app.put('/edit/(:id)', function (req, res) {
-	var itemId = req.params.id;
+    var itemId = req.params.id;
     // Validate user input - ensure non emptiness
     req.assert('sname', 'Name is required').notEmpty();
     req.assert('qty', 'Quantity is required').notEmpty();
@@ -185,12 +184,54 @@ app.put('/edit/(:id)', function (req, res) {
 // Route to delete an item. Notice that request method is DELETE here
 app.delete('/delete/(:id)', function (req, res) {
     // Fetch item id of the item to be deleted from the request.
-    var songDescription = req.params.id;
+    var itemId = req.params.id;
 
     // TODO: Initialize the deleteQuery variable with a SQL query
     // that deletes an item whose id = itemId in the
     // 'store' table
-    var deleteQuery = 'delete from songs where description = ' + songDescription + ';';
+    var deleteQuery = 'delete from songs where id = ' + itemId + ';';
+    db.none(deleteQuery)
+        .then(function (result) {
+                  req.flash('success', 'successfully deleted it');
+                  res.redirect('/store');
+        })
+        .catch(function (err) {
+                   req.flash('error', err);
+                   res.redirect('/store')
+        })
+    this.disabled = true;
+});
+
+// Route to delete an item. Notice that request method is DELETE here
+app.delete('/upvote/(:id)', function (req, res) {
+    // Fetch item id of the item to be deleted from the request.
+    var itemId = req.params.id;
+
+    // TODO: Initialize the deleteQuery variable with a SQL query
+    // that deletes an item whose id = itemId in the
+    // 'store' table
+    var deleteQuery = 'update songs set votes = votes + 1 where id = ' + itemId + ';';
+    db.none(deleteQuery)
+        .then(function (result) {
+                  req.flash('success', 'successfully deleted it');
+                  res.redirect('/store');
+        })
+        .catch(function (err) {
+                   req.flash('error', err);
+                   res.redirect('/store')
+        })
+    this.disabled = true;
+});
+
+// Route to delete an item. Notice that request method is DELETE here
+app.delete('/downvote/(:id)', function (req, res) {
+    // Fetch item id of the item to be deleted from the request.
+    var itemId = req.params.id;
+
+    // TODO: Initialize the deleteQuery variable with a SQL query
+    // that deletes an item whose id = itemId in the
+    // 'store' table
+    var deleteQuery = 'update songs set votes = votes - 1 where id = ' + itemId + ';';
     db.none(deleteQuery)
         .then(function (result) {
                   req.flash('success', 'successfully deleted it');
