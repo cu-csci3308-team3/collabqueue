@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<title>Jampool. Democracy is the DJ.</title>
+	<link rel = "apple-touch-icon" sizes = "180x180" href = "jampoolicon.png">
+	<link rel = "icon" type = "image/png" sizes = "32x32" href = "jampoolicon.png">
+	<link rel = "icon" type = "image/png" sizes = "16x16" href = "jampoolicon.png">
+	<link rel = "mask-icon" href = "jampoolicon.png">
+	<link rel = "shortcut icon" href = "jampoolicon.png">
+	<link rel="stylesheet" href="jampoolStyle.css">
+	<script src="randomGen.js"></script>
+</head>
+<body style="background-color: yellow">
+	<h1> <img id="jampoolLogo" src="jampoolLogo.png" alt="jampoolLogo"> </h1>
+	 <input type='text' id='songdesc' />
+	 <input type='button' value='Search and Queue' id='search'/>
+	 <ol id = 'list'></ol>
+	 <script type = "text/javascript">
+
+	 	document.getElementById("search").onclick = function()
+	 	{
+
+
+	 		var list = document.getElementById('list');
+	 		var sd = document.getElementById('songdesc').value;
+	 		var entry = document.createElement('li');
+	 		entry.appendChild(document.createTextNode(sd));
+	 		list.appendChild(entry);
+	 		var base_url = 'http://www.youtube.com/embed?listType=search&list=';
+ 			var search_field = document.getElementById('songdesc').value;
+ 			var target_url = base_url + search_field;
+
+ 			var ifr = document.getElementById('youriframe');
+ 			ifr.src = target_url;
+ 			return false;
+			}
+
+
+
+
+	 </script>
+	
+
+	
+	<iframe style="float: right" id="youriframe" width="640" height="360" src = "target_url" allow="autoplay; encrypted-media" allowfullscreen ></iframe>
+	<!-- BOOTSTRAP-->
+	 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<script src="like_button.js"></script>
+</body>
+</html>
