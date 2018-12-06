@@ -30,7 +30,7 @@ class App extends Component {
     }
 
     async playNext() {
-        let { description, ytlink } = await fetch('/store/next-song').then(r => r.json())
+        let { description, ytlink } = await fetch('/pool/next-song').then(r => r.json())
         let [ videoID ] = ytlink.match(/[A-Za-z0-9-_]{11}/)
         this.player.loadVideoById(videoID)
         this.setState({ title: description })
