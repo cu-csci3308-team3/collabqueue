@@ -1,6 +1,9 @@
 var express = require('express');
+var querystring = require('querystring')
+var got = require('got')
 var db = require('../database');
 var app = express();
+
 module.exports = app;
 
 app.get('/', function (request, response) {
@@ -28,68 +31,17 @@ app.get('/', function (request, response) {
 
 app.get('/add', function (request, response) {
     // render views/store/add.ejs
-    response.render('pool/add', {
-        title: 'Add New Song',
-        description: ''
-        //sname: '',
-        //qty: '',
-        //price: ''
-    })
+    response.redirect('/search.html')
 });
 
 // Route to insert values. Notice that request method is POST here
-app.post('/add', function (request, response) {
-    // Validate user input - ensure non emptiness
-    request.assert('description', 'description is required').notEmpty();
-    //request.assert('sname', 'sname is required').notEmpty();
-    //request.assert('qty', 'Quantity is required').notEmpty();
-    //request.assert('price', 'Price is required').notEmpty();
-
-    var errors = request.validationErrors();
-    if (!errors) { // No validation errors
-        var /*item*/song = {
-            // sanitize() is a function used to prevent Hackers from inserting
-            // malicious code(as data) into our database. There by preventing
-            // SQL-injection attacks.
-            description: request.sanitize('description').escape().trim(),
-            //sname: request.sanitize('sname').escape().trim(),
-            //qty: request.sanitize('qty').escape().trim(),
-            //price: request.sanitize('price').escape().trim()
-        };
-        // Running SQL query to insert data into the store table
-        db.none('INSERT INTO songs(description, ytlink, votes, addedwhen) VALUES($1, $2, $3, $4)', [song.description, 'use youtube video id to link to stuff Will did', 0, 'now()'/*item.sname, item.qty, item.price*/])
-            .then(function (result) {
-                request.flash('success', 'Data added successfully!');
-                // render views/store/add.ejs
-                response.render('pool/add', {
-                    title: 'Add New Song',
-                    description: ''
-                    //sname: '',
-                    //qty: '',
-                    //price: ''
-                })
-            }).catch(function (err) {
-            request.flash('error', err);
-            // render views/store/add.ejs
-            response.render('pool/add', {
-                title: 'Add New Song',
-                description: song.description
-                //sname: item.sname,
-                //qty: item.qty,
-                //price: item.price
-            })
-        })
-    } else {
-        var error_msg = errors.reduce((accumulator, current_error) => accumulator + '<br />' + current_error.msg, '');
-        request.flash('error', error_msg);
-        response.render('pool/add', {
-            title: 'Add New Item',
-            description: request.body.description
-            //sname: request.body.sname,
-            //qty: request.body.qty,
-            //price: request.body.price
-        })
+app.post('/add', async function (request, response) {
+    var song = {
+        id: request.sanitize('id').escape().trim(),
+        title: request.sanitize('title').escape().trim(),
     }
+    await db.none('INSERT INTO songs(description, ytlink, votes, addedwhen) VALUES($1, $2, $3, $4)', [song.title, song.id, 0, 'now()'])
+    response.redirect('/pool')
 });
 
 // Route to delete an item. Notice that request method is DELETE here
@@ -168,4 +120,27 @@ app.get('/next-song', async function (request, response) {
     }
 
     response.json(song)
+});
+
+app.get('/search', async function (request, response) {
+    let args = {
+        key: 'AIzaSyBupnuB-o2NEEtvr8AE9kxnp2BuzMnNPRY',
+        videoEmbeddable: true,
+        type: 'video',
+        maxResults: 25,
+        part: 'snippet',
+        q: request.query.q
+    }
+
+    let url = 'https://www.googleapis.com/youtube/v3/search?' + querystring.stringify(args)
+    let { body } = await got(url, { json: true })
+
+    let results = body.items.map(item => ({
+        id: item.id.videoId,
+        title: item.snippet.title,
+        channel: item.snippet.channelTitle,
+        image: item.snippet.thumbnails.default.url,
+    }))
+
+    response.json({ results });
 });
