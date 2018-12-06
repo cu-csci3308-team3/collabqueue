@@ -124,7 +124,7 @@ app.get('/next-song', async function (request, response) {
 
 app.get('/search', async function (request, response) {
     let args = {
-        key: 'AIzaSyBupnuB-o2NEEtvr8AE9kxnp2BuzMnNPRY',
+        key: global.API_KEY,
         videoEmbeddable: true,
         type: 'video',
         maxResults: 25,

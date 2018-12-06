@@ -2,6 +2,7 @@
 
 var express = require('express');
 var app = express();
+var { prompt } = require('enquirer')
 app.set('view engine', 'ejs');
 var expressValidator = require('express-validator');
 app.use(expressValidator());
@@ -38,6 +39,18 @@ app.use('/', index);
 app.use('/pool', pool);
 // THE 4 LINES ABOVE THIS
 var port = 4000;
-app.listen(port, function () {
-    console.log('Server running on http://localhost:' + port)
-});
+
+(async function main() {
+    let { key } = await prompt({
+        type: 'input',
+        name: 'key',
+        message: 'Enter YouTube API Key: ',
+        validate: key => key.length != 39 ? "That doesn't look like a YouTube API Key" : true
+    })
+    global.API_KEY = key
+
+    app.listen(port, function () {
+        console.log('Server running on http://localhost:' + port)
+    });
+})()
+

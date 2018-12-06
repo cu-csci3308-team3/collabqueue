@@ -16,7 +16,6 @@ class Search extends Component {
     }
 
     async handleSubmit() {
-        console.log('handle submit')
         let { input } = this.state
         this.setState({ loading: true })
         let { results } = await fetch(`/pool/search?q=${encodeURIComponent(input)}`).then(r => r.json())
