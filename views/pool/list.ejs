@@ -17,7 +17,6 @@
 <table border="0" width='60%'>
     <tr style='text-align:left; background-color:#CCC'>
         <th>Description</th>
-        <th>YTlink</th>
         <th>Votes</th>
         <th>AddedWhen</th>
         <th>Action</th>
@@ -28,26 +27,25 @@
         <% data.forEach(function(song){ %>
             <tr>
                 <td><%= song.description %></td>
-                <td><%= song.ytlink %></td>
                 <td><%= song.votes %></td>
                 <td><%= song.addedwhen %></td>
                 <td>
                     <div class="edit-delete" style="float:left">
-                        <form action="/store/delete/<%= song.id %>" method="post" style="float:right">
+                        <form action="/pool/delete/<%= song.id %>" method="post" style="float:right">
                             <input name="delete" id="hello" onclick="return confirm('Are you sure you want to remove from pool?')"
                                    type="submit" value='Delete'>
                             <input name="_method" type="hidden" value="DELETE">
                         </form>
                     </div>
                     <div class="edit-delete" style="float:left">
-                        <form action="/store/upvote/<%= song.id %>" method="post" style="float:right">
+                        <form action="/pool/upvote/<%= song.id %>" method="post" style="float:right">
                             <input name="delete" id="hello" onclick="return confirm('Are you sure you want to upvote?')"
                                    type="submit" value='Upvote'>
                             <input name="_method" type="hidden" value="DELETE">
                         </form>
                     </div>
                     <div class="edit-delete" style="float:left">
-                        <form action="/store/downvote/<%= song.id %>" method="post" style="float:right">
+                        <form action="/pool/downvote/<%= song.id %>" method="post" style="float:right">
                             <input name="delete" onclick="return confirm('Are you sure you want to downvote?')"
                                    type="submit" value='Downvote'>
                             <input name="_method" type="hidden" value="DELETE">

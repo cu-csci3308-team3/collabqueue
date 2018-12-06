@@ -11,7 +11,7 @@ app.get('/', function (request, response) {
     db.any(query)
         .then(function (rows) {
             // render views/store/list.ejs template file
-            response.render('store/list', {
+            response.render('pool/list', {
                 title: 'Current Queue',
                 data: rows
             })
@@ -19,7 +19,7 @@ app.get('/', function (request, response) {
         .catch(function (err) {
             // display error message in case an error
             request.flash('error', err);
-            response.render('store/list', {
+            response.render('pool/list', {
                 title: 'Current Queue',
                 data: ''
             })
@@ -28,7 +28,7 @@ app.get('/', function (request, response) {
 
 app.get('/add', function (request, response) {
     // render views/store/add.ejs
-    response.render('store/add', {
+    response.render('pool/add', {
         title: 'Add New Song',
         description: ''
         //sname: '',
@@ -61,7 +61,7 @@ app.post('/add', function (request, response) {
             .then(function (result) {
                 request.flash('success', 'Data added successfully!');
                 // render views/store/add.ejs
-                response.render('store/add', {
+                response.render('pool/add', {
                     title: 'Add New Song',
                     description: ''
                     //sname: '',
@@ -71,7 +71,7 @@ app.post('/add', function (request, response) {
             }).catch(function (err) {
             request.flash('error', err);
             // render views/store/add.ejs
-            response.render('store/add', {
+            response.render('pool/add', {
                 title: 'Add New Song',
                 description: song.description
                 //sname: item.sname,
@@ -82,101 +82,12 @@ app.post('/add', function (request, response) {
     } else {
         var error_msg = errors.reduce((accumulator, current_error) => accumulator + '<br />' + current_error.msg, '');
         request.flash('error', error_msg);
-        response.render('store/add', {
+        response.render('pool/add', {
             title: 'Add New Item',
             description: request.body.description
             //sname: request.body.sname,
             //qty: request.body.qty,
             //price: request.body.price
-        })
-    }
-});
-
-app.get('/edit/(:id)', function (request, response) {
-    // Fetch the id of the item from the request.
-    var itemId = request.params.id;
-
-    // TODO: Initialize the query variable with a SQL query
-    // that returns all columns of an item whose id = itemId in the
-    // 'store' table
-    var query = 'select * from store where id = ' + itemId + ';';
-    db.one(query)
-        .then(function (row) {
-            // if item not found
-            if (row.length === 0) {
-                request.flash('error', 'Item not found with id = ' + request.params.id);
-                response.redirect('/store')
-            }
-            else {
-                response.render('store/edit', {
-                    title: 'Edit Item',
-                    id: row.id,
-                    qty: row.qty,
-                    price: row.price,
-                    sname: row.sname
-                })
-            }
-        })
-        .catch(function (err) {
-            request.flash('error', err);
-            response.render('store/list', {
-                title: 'Store listing',
-                data: ''
-            })
-        })
-});
-
-
-// Route to update values. Notice that request method is PUT here
-app.put('/edit/(:id)', function (req, res) {
-    var itemId = req.params.id;
-    // Validate user input - ensure non emptiness
-    req.assert('sname', 'Name is required').notEmpty();
-    req.assert('qty', 'Quantity is required').notEmpty();
-    req.assert('price', 'Price is required').notEmpty();
-
-    var errors = req.validationErrors();
-    if (!errors) { // No validation errors
-        var item = {
-            // sanitize() is a function used to prevent Hackers from inserting
-            // malicious code(as data) into our database. There by preventing
-            // SQL-injection attacks.
-            sname: req.sanitize('sname').escape().trim(),
-            qty: req.sanitize('qty').escape().trim(),
-            price: req.sanitize('price').escape().trim()
-        };
-
-        // TODO: Initialize the updateQuery variable with a SQL query
-        // that updates the details of an item given its id
-        // in the 'store' table
-        var updateQuery = "UPDATE store SET sname = '" + item.sname + "', qty = " + item.qty + ", price = " + item.price + " WHERE id = " + itemId +";";
-
-        // Running SQL query to insert data into the store table
-        db.none(updateQuery)
-            .then(function (result) {
-                req.flash('success', 'Data updated successfully!');
-                res.redirect('/store');
-            })
-            .catch(function (err) {
-                req.flash('error', err);
-                res.render('store/edit', {
-                    title: 'Edit Item',
-                    id: req.params.id,
-                    sname: req.body.sname,
-                    qty: req.body.qty,
-                    price: req.body.price
-                })
-            })
-    }
-    else {
-        var error_msg = errors.reduce((accumulator, current_error) => accumulator + '<br />' + current_error.msg, '');
-        req.flash('error', error_msg);
-        res.render('store/edit', {
-            title: 'Edit Item,',
-            id: req.body.id,
-            sname: req.body.sname,
-            qty: req.body.qty,
-            price: req.body.price
         })
     }
 });
@@ -193,11 +104,11 @@ app.delete('/delete/(:id)', function (req, res) {
     db.none(deleteQuery)
         .then(function (result) {
                   req.flash('success', 'successfully deleted it');
-                  res.redirect('/store');
+                  res.redirect('/pool');
         })
         .catch(function (err) {
                    req.flash('error', err);
-                   res.redirect('/store')
+                   res.redirect('/pool')
         })
     this.disabled = true;
 });
@@ -214,11 +125,11 @@ app.delete('/upvote/(:id)', function (req, res) {
     db.none(deleteQuery)
         .then(function (result) {
                   req.flash('success', 'successfully deleted it');
-                  res.redirect('/store');
+                  res.redirect('/pool');
         })
         .catch(function (err) {
                    req.flash('error', err);
-                   res.redirect('/store')
+                   res.redirect('/pool')
         })
     this.disabled = true;
 });
@@ -235,11 +146,11 @@ app.delete('/downvote/(:id)', function (req, res) {
     db.none(deleteQuery)
         .then(function (result) {
                   req.flash('success', 'successfully deleted it');
-                  res.redirect('/store');
+                  res.redirect('/pool');
         })
         .catch(function (err) {
                    req.flash('error', err);
-                   res.redirect('/store')
+                   res.redirect('/pool');
         })
 });
 
