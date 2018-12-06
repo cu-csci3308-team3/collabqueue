@@ -33,9 +33,9 @@ app.use(session({
 app.use(flash());
 // PAY ATTENTION TO THESE 4 LINES
 var index = require('./routes/index');
-var store = require('./routes/store');
+var pool = require('./routes/pool');
 app.use('/', index);
-app.use('/store', store);
+app.use('/pool', pool);
 // THE 4 LINES ABOVE THIS
 var port = 4000;
 app.listen(port, function () {
