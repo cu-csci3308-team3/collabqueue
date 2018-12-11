@@ -18,7 +18,6 @@
     <tr style='text-align:left; background-color:#CCC'>
         <th>Description</th>
         <th>Votes</th>
-        <th>AddedWhen</th>
         <th>Action</th>
     </tr>
     <% if (data) { %>
@@ -28,15 +27,7 @@
             <tr>
                 <td><%= song.description %></td>
                 <td><%= song.votes %></td>
-                <td><%= song.addedwhen %></td>
                 <td>
-                    <div class="edit-delete" style="float:left">
-                        <form action="/pool/delete/<%= song.id %>" method="post" style="float:right">
-                            <input name="delete" id="hello" onclick="return confirm('Are you sure you want to remove from pool?')"
-                                   type="submit" value='Delete'>
-                            <input name="_method" type="hidden" value="DELETE">
-                        </form>
-                    </div>
                     <div class="edit-delete" style="float:left">
                         <form action="/pool/upvote/<%= song.id %>" method="post" style="float:right">
                             <input name="delete" id="hello" onclick="return confirm('Are you sure you want to upvote?')"

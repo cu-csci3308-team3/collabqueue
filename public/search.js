@@ -31,8 +31,17 @@ class Search extends Component {
     render(_, { loading, input, results }) {
         return html`
             <div class="app">
-                <input type="text" value=${input} onChange=${this.handleChange} />
-                <button onClick=${this.handleSubmit}>Search</button>
+                <input
+                    id="search"
+                    type="text"
+                    value=${input}
+                    onChange=${this.handleChange}
+                    placeholder="Enter a song title..."
+                />
+                <button 
+                    id="searchBtn"
+                    onClick=${this.handleSubmit}
+                >Search</button>
                 <br>
                 ${loading ? html`<img src="/loading.gif">` : null }
                 <${ResultsList} results=${results} chooseSong=${this.handleChoose}>
@@ -42,7 +51,9 @@ class Search extends Component {
 }
 
 const ResultsList = ({ results, chooseSong }) => html`
-    <ul>
+    <ul
+        id="results"
+    >
         ${results.map(result => html`
             <li
                 onClick=${() => chooseSong(result)}
