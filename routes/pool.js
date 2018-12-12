@@ -76,7 +76,7 @@ app.delete('/upvote/(:id)', function (req, res) {
     var deleteQuery = 'update songs set votes = votes + 1 where id = ' + itemId + ';';
     db.none(deleteQuery)
         .then(function (result) {
-                  req.flash('success', 'successfully deleted it');
+                  req.flash('success', 'successfully upvoted it');
                   res.redirect('/pool');
         })
         .catch(function (err) {
@@ -97,7 +97,7 @@ app.delete('/downvote/(:id)', function (req, res) {
     var deleteQuery = 'update songs set votes = votes - 1 where id = ' + itemId + ';';
     db.none(deleteQuery)
         .then(function (result) {
-                  req.flash('success', 'successfully deleted it');
+                  req.flash('success', 'successfully downvoted it');
                   res.redirect('/pool');
         })
         .catch(function (err) {
