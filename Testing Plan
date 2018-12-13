@@ -1,0 +1,17 @@
+● User Acceptance Test Plans
+1. Song order: If we add the songs hello (Adele), skyfall (Adele), they know (chief
+keef), and everyday is halloween (chief keef) in this order, the pool should play
+the songs in this order.
+
+2. Using the songs added above, if a song receives an upvote or downvote the
+pool should be reorder to play in sequence of highest amount of votes to lowest
+amount of votes.
+
+  a. If skyfall receives 1 upvote, everyday is halloween receives 2 upvotes,
+     and hello receives 1 downvote, the new order should play as everyday
+     is halloween (+2 votes), skyfall (+1 vote), they know (since it has neutral
+     votes), hello (-1 votes)
+
+3. Ensure the delete function works. Once a song is deleted make sure songs are
+reordered relative to each other once the deleted song is missing. Should also
+verify the song’s disappearance in database.
